@@ -25,7 +25,7 @@ cp -r OTT-QA/released_data data_ottqa
 # Retrieval
 
 # Evidence Chain
-##Data Preprocess
+## Data Preprocess
 ```angular2html
 cd preprocess/
 export CONCAT_TBS=15
@@ -113,6 +113,7 @@ cd qa_evidence_chain/
 bash train_qa_evidence_chain_retrieved.sh
 ```
 # Data Information
+/home/t-wzhong/v-wanzho/ODQA/cleaned_data_code_model
 | File Type | File Name | File Location |
 | ---- | ---- | ---- |
 | Table Corpus | 
