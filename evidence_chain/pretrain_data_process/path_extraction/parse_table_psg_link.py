@@ -355,7 +355,7 @@ def process(table,ttype='fake_pretrain_data'):
 
 
 if __name__ == '__main__':
-    basic_dir = '/home/t-wzhong/v-wanzho/ODQA'
+    basic_dir = './ODQA'
     # all_tables = json.load(open(f'{basic_dir}/OTT-QA/data/traindev_tables.json','r',encoding='utf8'))
     all_tables = json.load(open(f'{basic_dir}/data/data_wikitable/all_tables.json', 'r', encoding='utf8'))
     all_passages = json.load(open(f'{basic_dir}/OTT-QA/data/all_passages.json','r',encoding='utf8'))
@@ -386,7 +386,7 @@ if __name__ == '__main__':
 
     all_no_found = set()
     if type=='fake_pretrain_data':
-        save_path = '/home/t-wzhong/v-wanzho/ODQA/data/preprocessed_data/evidence_chain/pre-training/fake_question_pretraining'
+        save_path = f'{basic_dir}/data/preprocessed_data/evidence_chain/pre-training/fake_question_pretraining'
         train_instances_cnt, dev_instances_cnt = 0,0
         # print(len(all_results))
         outputs_results_train, outputs_results_dev = data_split([result for results in all_results for result in results[0]],0.99,shuffle=True)
@@ -400,13 +400,11 @@ if __name__ == '__main__':
                 train_instances_cnt+=1
         print('number of train instances {}, dev_instances {}'.format(train_instances_cnt, dev_instances_cnt))
     elif type=='bart_inference_data':
-        save_path = '/home/t-wzhong/v-wanzho/ODQA/data/preprocessed_data/evidence_chain/pre-training/inference_bart_evidence_chain_0_addneg.jsonl'
+        save_path = f'{basic_dir}/data/preprocessed_data/evidence_chain/pre-training/inference_bart_evidence_chain_0_addneg.jsonl'
 
         instances_cnt = 0
         with open(save_path,'w',encoding='utf8') as outf:
             for results in all_results:
-                # if instances_cnt==3500000:
-                #     break
                 all_no_found = all_no_found.union(results[1])
                 for result in results[0]:
                     outf.write(json.dumps(result)+'\n')
@@ -414,7 +412,7 @@ if __name__ == '__main__':
         print('all no found passage: {}'.format(len(all_no_found)))
         print('number of instances {}'.format(instances_cnt))
     elif type=='pretrain_negatives':
-        save_path = '/home/t-wzhong/v-wanzho/ODQA/data/preprocessed_data/evidence_chain/pre-training/tbrep2negs_new.json'
+        save_path = f'{basic_dir}/data/preprocessed_data/evidence_chain/pre-training/tbrep2negs_new.json'
         tbrep2negs = {}
         for results in all_results:
             tbrep2negs.update(results[2])
@@ -422,70 +420,4 @@ if __name__ == '__main__':
         print('length of tbrep 2 negs {}'.format(len(tbrep2negs)))
         print('Saving to {}'.format(save_path))
         json.dump(tbrep2negs,outf)
-    ''' 
-    for tid, table in tqdm(list(all_tables.items())[int(length/2):],desc='Processing tables'):
-        url = table['url']
-        title = table['title']
-        header = [h[0] for h in table['header']]
-        content = table['data']
-        ori_contents = [[cell[0] for cell in row] for row in table['data']]
-        mapping_entity = {}
-        position2wiki = []
 
-        for row_idx, row in enumerate(table['data']):
-            position2wiki_i = {}
-            for col_idx, cell in enumerate(row):
-                for i, ent in enumerate(cell[1]):
-                    if ent:
-                        mapping_entity[ent] = mapping_entity.get(ent, []) + [(row_idx, col_idx)]
-                        position2wiki_i[f'{row_idx},{col_idx}'] = position2wiki_i.get(f'{row_idx},{col_idx}', []) + [ent]
-            position2wiki.append(position2wiki_i)
-            pos_passages_index = [item for k, v in list(position2wiki_i.items()) for item in v]
-            pos_passages = []
-            for pindex in pos_passages_index:
-                if pindex in all_passages.keys():
-                    pos_passages.append(all_passages[pindex])
-            tb_rep =  convert_tb_to_string_metadata(header,ori_contents[row_idx],pos_passages)
-            # try:
-            #     top3_neg_psgs = [item for items in tbid2docs['{}_{}'.format(tid, row_idx)] for item in items if
-            #                  item['id'] not in pos_passages_index]
-            # except Exception as e:
-            #     print(e)
-            #     top3_neg_psgs = []
-            if len(position2wiki_i) >= 2:
-                two_hop_psg_pairs = list(combinations(list(position2wiki_i.items()), 2))#random.choices(list(position2wiki_i.items()),2)
-                for pair in two_hop_psg_pairs:
-                    # print(pair)
-                    cid1,cid2 = int(pair[0][0].split(',')[1]), int(pair[1][0].split(',')[1])
-                    try:
-                        seq = [{'passage_index':pair[0][1][0],'passage':all_passages[pair[0][1][0]]},
-                               {'table_cell':'{}/{}'.format(tid,pair[0][0]),'header':header[cid1],'content':ori_contents[row_idx][cid1]},
-                               {'table_cell':'{}/{}'.format(tid,pair[1][0]),'header':header[cid2],'content':ori_contents[row_idx][cid2]},
-                               {'passage_index':pair[1][1][0],'passage':all_passages[pair[1][1][0]]}]
-
-                        pretrain_chain_reps = generate_chains(seq)
-                        all_pretrain_instances.extend([{'input': f'{tb_rep} [EC] {chain_rep}', 'output': ''} for chain_rep in pretrain_chain_reps])
-                        # if top3_neg_psgs:
-                        #     neg_psg_1 = find_most_similar_neg_psg(pair[0][1][0],top3_neg_psgs)
-                        #     neg_psg_2 = find_most_similar_neg_psg(pair[1][1][0], top3_neg_psgs)
-                        #     neg_cell_1 = find_most_similar(ori_contents[row_idx][cid1],[tmp_row[cid1] for tmp_rid,tmp_row in enumerate(ori_contents) if tmp_rid!=row_idx])
-                        #     neg_cell_2 = find_most_similar(ori_contents[row_idx][cid2],[tmp_row[cid2] for tmp_rid,tmp_row in enumerate(ori_contents) if tmp_rid!=row_idx])
-                        # else:
-                        #     neg_psg_1,neg_psg_2,neg_cell_1,neg_cell_2={'index':[],'passages':[]},{'index':[],'passages':[]},[],[]
-                        # 
-                        # all_instances.append({'chain':seq,'table_row':row,'table_title':title,'section_title':table['section_title'],'url':url,'header':header,'row_id':row_idx,
-                        #                   'neg_passages':[neg_psg_1,neg_psg_2],
-                        #                   'neg_cells':[neg_cell_1,neg_cell_2]})
-                    except Exception as e:
-                        print(e)
-
-    # save_path = '/home/t-wzhong/v-wanzho/ODQA/data/preprocessed_data/parse_table_psg_path/path_analyze_all_0'
-    # #dev_split, train_split = data_split(all_instances,ratio=0.01,shuffle=True)
-    # with open(save_path+"_train.json",'w',encoding='utf8') as outf:
-    #     json.dump(all_instances,outf,indent=4)
-    #with open(save_path+"_dev.json",'w',encoding='utf8') as outf:
-        #json.dump(dev_split,outf,indent=4)
-    print(f'Saving the outputs to {save_path}')
-        # for rid, row in enumerate(content):
-        #     for cid, cell in enumerate(row):
-    '''

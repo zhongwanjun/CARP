@@ -208,8 +208,3 @@ if __name__ == "__main__":
     # ES.delete_one()
     res = ES.search_by_id('Soul_Food_-LRB-film-RRB-0')
     print(res)
-    # ES.delete_index()
-    # fp = '/mnt/wanjun/FEVER/data/wiki-pages/wiki-001.jsonl'
-    # ES.bulk_insert_one(fp)
-    # claim = 'football'
-    # ES.search(claim)

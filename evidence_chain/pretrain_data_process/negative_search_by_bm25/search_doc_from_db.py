@@ -1,6 +1,6 @@
 import os
 from tqdm import tqdm
-from elastic_search_wanjun import MyElastic, SearchQuery
+from elastic_search import MyElastic, SearchQuery
 # from utils.config import args
 # from utils.rule_pattern import RulePattern
 # from utils import common
@@ -122,7 +122,7 @@ if __name__ == "__main__":
     parser.add_argument('--finetune', action='store_true')
     args = parser.parse_args()
     if args.pretrain:
-        basic_dir = '/home/t-wzhong/table-odqa/Data/evidence_chain/pre-training/evidence_output_pretrain_shortest.json'
+        basic_dir = './ODQA/data/evidence_chain_data/bart_output_for_pretraining/pre-training/evidence_output_pretrain_shortest.json'
         file_path = os.path.join(basic_dir,'')
         inf = open(basic_dir,'r')
         data = []
@@ -135,7 +135,7 @@ if __name__ == "__main__":
 
         # data = [json.loads(line.strip()) for line in open(basic_dir,'r').readlines()]
         n_threads = 20
-        with open('/home/t-wzhong/table-odqa/Data/evidence_chain/pre-training/evidence_output_pretrain_shortest_esnegs-2.json', 'w') as outf:
+        with open('./ODQA/data/evidence_chain_data/bart_output_for_pretraining/add_negatives/pre-training/evidence_output_pretrain_shortest_esnegs-2.json', 'w') as outf:
             # results = search_from_db_pretrain(data,outf)
             running_function = search_from_db_single
             with Pool(n_threads) as p:
@@ -147,7 +147,7 @@ if __name__ == "__main__":
                 if result:
                     outf.write(json.dumps(result) + '\n')
     if args.finetune:
-        basic_dir = '/home/t-wzhong/v-wanzho/ODQA/data/preprocessed_data/evidence_chain/ground-truth-based/ground-truth-evidence-chain/'
+        basic_dir = './ODQA/data/evidence_chain_data/ground-truth-based/ground-truth-evidence-chain/'
         file_paths = [os.path.join(basic_dir, file) for file in
                       ['train_gt-ec-weighted.json', 'dev_gt-ec-weighted.json']]
         n_threads = 20

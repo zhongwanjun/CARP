@@ -30,14 +30,14 @@ cp -r OTT-QA/released_data data_ottqa
 cd preprocess/
 export CONCAT_TBS=15
 export TABLE_CORPUS=table_corpus_metagptdoc
-export MODEL_PATH=/home/t-wzhong/table-odqa-data-model/Data/retrieval_output4qa/shared_roberta_threecat_basic_mean_one_query
+export MODEL_PATH=./ODQA/data/retrieval_results
 python ../preprocessing/qa_preprocess.py \
   --split dev \
   --reprocess \
   --add_link \
   --topk_tbs ${CONCAT_TBS} \
   --retrieval_results_file ${MODEL_PATH}/dev_output_k100_${TABLE_CORPUS}.json \
-  --qa_save_path ${MODEL_PATH}/dev_preprocessed_${TABLE_CORPUS}_k100cat${CONCAT_TBS}_wanjun.json \
+  --qa_save_path ${MODEL_PATH}/dev_preprocessed_${TABLE_CORPUS}_k100cat${CONCAT_TBS}.json \
   2>&1 |tee ${MODEL_PATH}/run_logs/${TABLE_CORPUS}/preprocess_qa_dev_k100cat${CONCAT_TBS}.log;
 ```
 ## Extraction Model Training
@@ -89,14 +89,14 @@ bash run_evidence_pretrain.sh
 cd preprocess/
 export CONCAT_TBS=15
 export TABLE_CORPUS=table_corpus_metagptdoc
-export MODEL_PATH=/home/t-wzhong/table-odqa-data-model/Data/retrieval_output4qa/shared_roberta_threecat_basic_mean_one_query
-python ../preprocessing/qa_preprocess.py \
+export MODEL_PATH=./ODQA/data/retrieval_results
+python qa_preprocess.py \
   --split dev \
   --reprocess \
   --add_link \
   --topk_tbs ${CONCAT_TBS} \
   --retrieval_results_file ${MODEL_PATH}/dev_output_k100_${TABLE_CORPUS}.json \
-  --qa_save_path ${MODEL_PATH}/dev_preprocessed_${TABLE_CORPUS}_k100cat${CONCAT_TBS}_wanjun.json \
+  --qa_save_path ${MODEL_PATH}/dev_preprocessed_${TABLE_CORPUS}_k100cat${CONCAT_TBS}.json \
   2>&1 |tee ${MODEL_PATH}/run_logs/${TABLE_CORPUS}/preprocess_qa_dev_k100cat${CONCAT_TBS}.log;
 ```
 ### Baseline QA Model Training
@@ -112,8 +112,17 @@ python merge_ec_file.py
 cd qa_evidence_chain/
 bash train_qa_evidence_chain_retrieved.sh
 ```
+### CARP QA Model Testing
+```angular2html
+cd qa_evidence_chain/
+bash test_qa_evidence_chain_retrieved.sh
+```
 # Data Information
-/home/t-wzhong/v-wanzho/ODQA/cleaned_data_code_model
-| File Type | File Name | File Location |
+| File Type | File Name | File Location | 
 | ---- | ---- | ---- |
-| Table Corpus | 
+| Source Corpus | all_passages.json (and)  all_plain_tables.json | source_corpus/OTT-QA/
+| Wikipedia tables and passages | all_tables.json | source_corpus/Wikipedia-table-passages
+| Retrieval Results | train/dev/test_output_k100_table_corpus_metagptdoc.json | retrieval_results/
+| Basic QA data | train/dev/test_preprocessed_table_corpus_metagptdoc_k100cat15.json | basic_qa_data/
+| evidence chain pretrain/train/valid/test data | (for-pretraining) bart_output_for_pretraining / (for training) ground-truth-based / (for testing) retrieval_based | evidence_chain_data/ 
+| QA data with extracted evidence chain | train/dev_ranked_evidence_chain_for_qa_weighted.json / test_evidence_chain_weighted_scores.json | qa_with_evidence_chain

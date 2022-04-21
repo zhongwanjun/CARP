@@ -22,15 +22,15 @@ from utils_preprocess import remove_null_header_column, remove_removed_contents,
 from utils_preprocess import rank_doc_tfidf
 from qa.utils_qa import read_jsonl, read_json
 # from preprocessing import get_sorted_passages, get_sorted_sentences
-b_dir = '/home/t-wzhong/v-wanzho/ODQA'
-junjie_dir = '/home/t-wzhong/table-odqa-data-model'
+b_dir = './ODQA'
+retriever_dir = './table-odqa-data-model'
 basic_dir = f'{b_dir}/data'
 
 # basic_dir = '..'
 resource_path = f'{basic_dir}/data_wikitable/'
 LINKDICT = {'ori': f'{basic_dir}/data_wikitable/all_constructed_tables.json',
             'gpt_only': f'{basic_dir}/data_wikitable/all_constructed_gptonly_tables.json',
-            'blink_only': f'{junjie_dir}/Data/retrieval_output4qa/all_constructed_blink_tables.json',
+            'blink_only': f'{retriever_dir}/Data/retrieval_output4qa/all_constructed_blink_tables.json',
             'ori_gpt': f'{basic_dir}/data_wikitable/all_constructed_gptdoc_tables.json',
             'blink_gpt': f'{basic_dir}/data_wikitable/all_constructed_blinkgpt_tables.json',
             }
@@ -216,7 +216,7 @@ def prepare_training_data_random_nega(ziped_data, table_path, request_path, max_
                                                      'gt_passages':all_gt_passages[i],
                                                      'context': context})
             orig_answer = data['answer-text']
-            start = context.lower().find(orig_answer.lower()) # TODO start means string position or token position?
+            start = context.lower().find(orig_answer.lower())
             gt_tb_ids['{}-{}'.format(table_id,i)] = {'context':context,'passages':passages[i]}
             # randomly select a answer if there exists multiple
             #         start = random.choice(all_start_pos)
@@ -335,7 +335,6 @@ if __name__ == '__main__':
     parser.add_argument("--link_file", type=str, default='blink_only',
                         choices=['ori', 'gpt_only', 'blink_only', 'ori_gpt', 'blink_gpt'])
     parser.add_argument("--qa_save_path", type=str, default=f'{basic_dir}/preprocessed_data/qa_evidence_chain/train_preprocessed_gtmodify.json',)
-    # parser.add_argument("--retrieval_results_file", type=str, default='/home/t-wzhong/v-wanzho/ODQA/data/preprocessed_data/qa_evidence_chain/data4qa_v2/dev_output_k100.json',
     parser.add_argument("--retrieval_results_file", type=str, default=r'{basic_dir}/preprocessed_data/qa_evidence_chain/data4qa_v2/dev_output_k100.json',
                         help="path that store the results of table block retrieval")
     args = parser.parse_args()
@@ -365,32 +364,6 @@ if __name__ == '__main__':
             with open(f'{basic_dir}/data_ottqa/{args.split}.traced.json', 'r') as f:
                 data = json.load(f)
             retrieval_outputs = read_jsonl(args.retrieval_results_file)
-
-            # tmp_data = read_jsonl('/home/t-wzhong/v-wanzho/ODQA/OTT-QA/link_generator/tfidf_augmentation_results.json')
-            '''
-            for i in range(8):
-                # with open(
-                #         '/home/t-wzhong/v-wanzho/ODQA/OTT-QA/link_generator/row_passage_query.json-0000{}-of-00008'.format(
-                #                 i), 'r', encoding='utf8') as inf:
-                tmp_data = read_jsonl('/home/t-wzhong/v-wanzho/ODQA/OTT-QA/link_generator/row_passage_query.json-0000{}-of-00008'.format(i))
-                for line in tmp_data:
-                    tbid2docs[line[0]] = ['/wiki/' + item.replace(' ', '_') for item in line[1]]
-            '''
-            # tmp_data = read_jsonl(f'{basic_dir}/data_wikitable/tfidf_augmentation_results.json')
-            # tbid2docs = {}
-            # for line in tmp_data:
-            #     tbid2docs[line[0]] = line[1]
-            # logger.info('length of the table id 2 documents： {}'.format(len(tbid2docs.keys())))
-            '''
-            zip_data = list(zip(data, retrieval_outputs))
-            qa_results,hits = [],[]
-            for item in tqdm(zip_data):
-                result = prepare_training_data_random_nega(item,table_path=table_path, request_path=request_path, max_passages=args.max_passages, max_tokens=args.max_tokens, max_cell_tokens=args.max_cell_tokens)
-                # print(result.keys())
-                qa_results.append(result['qa_data'])
-                hits.append(result['hit'])
-            print(sum(hits)/len(data))
-            '''
 
             results = []
             output_compare = []

@@ -2,21 +2,8 @@ import sys
 
 sys.path.append('../../')
 sys.path.append('../')
-import argparse
-import logging
-import json
-import pickle
-import pandas as pd
-import os
-import random
-import numpy as np
-from functools import partial
-from multiprocessing import Pool, cpu_count
-from tqdm import tqdm
-from sklearn.feature_extraction.text import TfidfVectorizer
+
 from extraction.evidence_chain_addpathscore import *#, extract_evidence_chain, extract_key_words
-from utils.common import convert_tb_to_string_metadata
-import sys
 
 import argparse
 import logging
@@ -28,7 +15,7 @@ from functools import partial
 from multiprocessing import Pool, cpu_count
 from tqdm import tqdm
 
-basic_dir = '/home/t-wzhong/v-wanzho/ODQA/data'
+basic_dir = './ODQA/data'
 # basic_dir = '..'
 resource_path = f'{basic_dir}/data_wikitable/'
 
@@ -202,22 +189,21 @@ if __name__ == '__main__':
     console = logging.StreamHandler()
     console.setFormatter(fmt)
     logger.addHandler(console)
-
+    basic_dir = './ODQA/data'
     n_threads = 20
     if args.split in ['train', 'dev','test']:
         print("using {}".format(args.split))
         # table_path = 'traindev_tables_tok'
         # request_path = 'traindev_request_tok'
-        # qa_save_path = f'{basic_dir}/preprocessed_data/qa_evidence_chain/{args.split}_preprocessed_normalized_gtmodify_top100.json'
-        qa_save_path = f'/home/t-wzhong/table-odqa/Data/retrieval_output4qa/shared_roberta_threecat_basic_mean_one_query/{args.split}_preprocessed_table_corpus_metagptdoc_k100cat15_wanjun.json'
-        keywords_save_path = f'/home/t-wzhong/v-wanzho/ODQA/data/preprocessed_data/evidence_chain/retrieval-based/keywords/new_chain_blink_{args.split}_keywords.json'#_{args.part}'
+        qa_save_path = f'{basic_dir}/retrieval_results/{args.split}_preprocessed_table_corpus_metagptdoc_k100cat15.json'
+        keywords_save_path = f'{basic_dir}/evidence_chain_data/retrieval-based/keywords/new_chain_blink_{args.split}_keywords.json'#_{args.part}'
         # keywords_save_path = f'{basic_dir}/preprocessed_data/evidence_chain/ground-truth-based/keywords/{args.split}_gt-tb-keywords.json'
         # evi_chain_save_path = f'{basic_dir}/preprocessed_data/evidence_chain/{args.split}_preprocessed_normalized_gtmodify_candidate_evichain_addnoun.json'
         # evi_chain_save_path = f'{basic_dir}/preprocessed_data/evidence_chain/retrieval-based/candidate_chain/{args.split}_evidence_chain_weighted_ranking_{args.part}.json'
         # pretrain_save_path = f'{basic_dir}/preprocessed_data/evidence_chain/pre-training/{args.split}_ec_path_for_bart_weighted.jsonl'
-        evi_chain_save_path = f'{basic_dir}/preprocessed_data/evidence_chain/ground-truth-based/ground-truth-evidence-chain/{args.split}_gt-ec-simple_multineg.json'
+        evi_chain_save_path = f'{basic_dir}/evidence_chain_data/ground-truth-based/ground-truth-evidence-chain/{args.split}_gt-ec-simple_multineg.json'
         # cand_evi_chain_save_path = f'{basic_dir}/preprocessed_data/evidence_chain/ground-truth-based/candidate_chain/{args.split}_gttb_all_candidate_ec_simple.json'
-        cand_evi_chain_save_path = f'{basic_dir}/preprocessed_data/evidence_chain/retrieval-based/candidate_chain/{args.split}_evidence_chain_simple_ranking.json'#_{args.part}.json'
+        cand_evi_chain_save_path = f'{basic_dir}/evidence_chain_data/retrieval-based/candidate_chain/{args.split}_evidence_chain_simple_ranking.json'#_{args.part}.json'
         if args.extract_keywords:
             RP = RulePattern(gpu=0)
             with open(qa_save_path, 'r') as f:
