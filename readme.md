@@ -116,6 +116,7 @@ bash train_qa_evidence_chain_retrieved.sh
 ```
 ### CARP QA Model Testing
 ```angular2html
+Testing the model with checkpoint:
 cd qa_evidence_chain/
 bash test_qa_evidence_chain_retrieved.sh
 ```
