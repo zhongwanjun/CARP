@@ -131,11 +131,12 @@ bash test_qa_evidence_chain_retrieved.sh
 
 # Citation
 If you find this resource useful, please cite the paper introducing CARP:
-'''
+
+```
 @article{zhong2022reasoning,
   title={Reasoning over Hybrid Chain for Table-and-Text Open Domain QA},
   author={Zhong, Wanjun and Huang, Junjie and Liu, Qian and Zhou, Ming and Wang, Jiahai and Yin, Jian and Duan, Nan},
   journal={arXiv preprint arXiv:2201.05880},
   year={2022}
 }
-'''
+```
