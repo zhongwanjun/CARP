@@ -501,8 +501,8 @@ def prepare_qa_data_evidence_chain_ranking_retrieved(data, topk_tbs = 15):
 
         if idx < 2:
             logger.info(split[-1])
-    logger.info('{}/{} examples are hitted'.format(len(hit), len(data)))
-    logger.info('no candidate rate: {}'.format(error_cnt/all_cnt))
+    # logger.info('{}/{} examples are hitted'.format(len(hit), len(data)))
+    # logger.info('no candidate rate: {}'.format(error_cnt/all_cnt))
     return split
 
 def prepare_qa_data_evidence_chain_ranking_retrieved_eval(data, topk_tbs = 15):
@@ -565,8 +565,8 @@ def prepare_qa_data_evidence_chain_ranking_retrieved_eval(data, topk_tbs = 15):
 
         if idx < 2:
             logger.info(split[-1])
-    logger.info('no candidate rate: {}'.format(error_cnt / all_cnt)) 
-    logger.info('{}/{} examples are hitted'.format(len(hit), len(data)))
+    # logger.info('no candidate rate: {}'.format(error_cnt / all_cnt))
+    # logger.info('{}/{} examples are hitted'.format(len(hit), len(data)))
     return split
 
 def prepare_qa_data_evidence_chain_ranking_retrieved_test(data, topk_tbs = 15):
@@ -601,9 +601,9 @@ def prepare_qa_data_evidence_chain_ranking_retrieved_test(data, topk_tbs = 15):
                       'question': d['question'], 'question_id': d['question_id'],
                       'answers': [{'answer_start': 0, 'text': 'none'}]})
         key2idx[d['question_id']] = idx
-        if idx < 2:
-            logger.info(split[-1])
-    logger.info('no candidate rate: {}'.format(error_cnt / all_cnt))
+    #     if idx < 2:
+    #         logger.info(split[-1])
+    # logger.info('no candidate rate: {}'.format(error_cnt / all_cnt))
     return split,key2idx
 def prepare_qa_data_evidence_chain_ranking(data, topk_tbs = 15):
     split = []
@@ -725,8 +725,8 @@ def prepare_qa_data_tbconcat(data, topk_tbs = 15):
         split.append({'context': input_context_str, 'title': d['table_id'],
                       'question': d['question'], 'question_id': d['question_id'],
                       'answers': [{'answer_start': start, 'text': answer}]})
-        if idx<2:
-            print(split[-1])
+        # if idx<2:
+        #     print(split[-1])
     print('{}/{} examples are hitted'.format(len(hit),len(data)))
     return split
 def prepare_qa_data_tbconcat_eval(data, topk_tbs = 15):
@@ -796,8 +796,8 @@ def prepare_qa_data_tbconcat_eval(data, topk_tbs = 15):
         split.append({'context': input_context_str, 'title': d['table_id'],
                       'question': d['question'], 'question_id': d['question_id'],
                       'answers': [{'answer_start': 0, 'text': orig_answer}]})
-        if idx<2:
-            print(split[-1])
+        # if idx<2:
+        #     print(split[-1])
     print('{}/{} examples are hitted'.format(len(hit),len(data)))
 
     return split
