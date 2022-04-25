@@ -466,7 +466,7 @@ def prepare_qa_data_evidence_chain_ranking_retrieved(data, topk_tbs = 15):
                 continue
             if block['candidate_evidence_chains']:
                 ranked_ec = sorted(block['candidate_evidence_chains'], key=lambda k: k['score'][1], reverse=True)
-                if False:#len(ranked_ec)>=2:
+                if len(ranked_ec)>=2:
                     union_ec = find_union_chain(ranked_ec, topt=2)
                     selected_chain = convert_chain_to_string(union_ec)
                 else:
@@ -529,7 +529,7 @@ def prepare_qa_data_evidence_chain_ranking_retrieved_eval(data, topk_tbs = 15):
 
             if block['candidate_evidence_chains']:
                 ranked_ec = sorted(block['candidate_evidence_chains'], key=lambda k: softmax(k['score'])[1], reverse=True)
-                if False:#len(ranked_ec)>=2:
+                if len(ranked_ec)>=2:
                     union_ec = find_union_chain(ranked_ec, topt=2)
                     selected_chain = convert_chain_to_string(union_ec)
                 else:
@@ -581,7 +581,7 @@ def prepare_qa_data_evidence_chain_ranking_retrieved_test(data, topk_tbs = 15):
             all_cnt+=1
             if block['candidate_evidence_chains']:
                 ranked_ec = sorted(block['candidate_evidence_chains'], key=lambda k: softmax(k['score'])[1], reverse=True)
-                if False: #len(ranked_ec)>=2:
+                if len(ranked_ec)>=2:
                     union_ec = find_union_chain(ranked_ec, topt=2)
                     selected_chain = convert_chain_to_string(union_ec)
                 else:

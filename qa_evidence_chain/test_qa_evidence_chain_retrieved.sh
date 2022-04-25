@@ -4,10 +4,10 @@ export MODEL_NAME=allenai/longformer-base-4096
 export TOKENIZERS_PARALLELISM=false
 export TRAIN_DATA_PATH=train_ranked_evidence_chain_for_qa_weighted.json
 export DEV_DATA_PATH=dev_ranked_evidence_chain_for_qa_weighted.json
-export MODEL_DIR=longformer_ecmask_weighted_1e-5_squadv1
+export MODEL_DIR=${MODEL_CHECKPOINT}
 export PREFIX=retrieved_blink_ecmask
 python train_final_qa_ori.py \
-    --do_predict \
+    --do_eval \
     --model_type longformer \
     --evaluate_during_training \
     --data_dir ${BASIC_DIR}/data/qa_with_evidence_chain \
@@ -26,6 +26,3 @@ python train_final_qa_ori.py \
     --prefix ${PREFIX} \
     --save_cache \
     --overwrite_cache \
-    --predict_file test_evidence_chain_weighted_scores.json \
-    --pred_model_dir ${BASIC_DIR}/model/qa_model/longformer_ecmask_weighted_1e-5_squadv1/checkpoint-best \
-    --predict_output_file ${BASIC_DIR}/submit_file/test_weighted_large_multineg_squadv1.json
