@@ -126,7 +126,6 @@ bash test_qa_evidence_chain_retrieved.sh
 | Source Corpus | all_passages.json (and)  all_plain_tables.json | source_corpus/OTT-QA/
 | Wikipedia tables and passages | all_tables.json | source_corpus/Wikipedia-table-passages
 | Retrieval Results | train/dev/test_output_k100_table_corpus_metagptdoc.json | retrieval_results/
-| Basic QA data | train/dev/test_preprocessed_table_corpus_metagptdoc_k100cat15.json | basic_qa_data/
 | evidence chain pretrain/train/valid/test data | (for-pretraining) bart_output_for_pretraining / (for training) ground-truth-based / (for testing) retrieval_based | evidence_chain_data/ 
 | QA data with extracted evidence chain | train/dev_ranked_evidence_chain_for_qa_weighted.json / test_evidence_chain_weighted_scores.json | qa_with_evidence_chain
 
