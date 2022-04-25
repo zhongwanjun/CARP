@@ -126,9 +126,9 @@ bash test_qa_evidence_chain_retrieved.sh
 | Source Corpus | all_passages.json (and)  all_plain_tables.json | source_corpus/OTT-QA/
 | Wikipedia tables and passages | all_tables.json | source_corpus/Wikipedia-table-passages
 | Retrieval Results | train/dev/test_output_k100_table_corpus_metagptdoc.json | retrieval_results/
+| QA data with extracted evidence chain | train/dev_ranked_evidence_chain_for_qa_weighted.json / test_evidence_chain_weighted_scores.json | qa_with_evidence_chain
 
 [//]: # (| evidence chain pretrain/train/valid/test data | &#40;for-pretraining&#41; bart_output_for_pretraining / &#40;for training&#41; ground-truth-based / &#40;for testing&#41; retrieval_based | evidence_chain_data/ )
-| QA data with extracted evidence chain | train/dev_ranked_evidence_chain_for_qa_weighted.json / test_evidence_chain_weighted_scores.json | qa_with_evidence_chain
 
 # Citation
 If you find this resource useful, please cite the paper introducing CARP:
