@@ -1,6 +1,6 @@
 # CARP
-This repository serves primarily as codebase and data, model for training, evaluation and inference of the framework CARP.
-[CARP](https://arxiv.org/pdf/2201.05880.pdf) is the chain-centric reasoning and pre-training framework for table-and-text open domain QA. 
+This repository serves primarily as codebase and data, model for training, evaluation and inference of the framework CARP, which is proposed by the paper
+[Reasoning over Hybrid Chain for Table-and-Text Open Domain Question Answering](https://arxiv.org/pdf/2201.05880.pdf) is the chain-centric reasoning and pre-training framework for table-and-text open domain QA. 
 # Preprocessing
 
 ## Requirements
