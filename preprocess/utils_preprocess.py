@@ -224,8 +224,6 @@ def is_squence_number(string_list):
 
 
 def remove_null_header_column(header, contents):
-    # 11993/419183个table中，存在header有空的情况，这11993个table中，空且为序号的有6720列, 全部去掉
-    # 所以把为序号的列删掉，同时把非序号的列的空header改名字
     null_ids = [i for i, h in enumerate(header) if h == '']
     for i in reversed(null_ids):
         ret = [cont[i] for cont in contents]
@@ -250,26 +248,6 @@ def remove_sequence_number_column(header, contents):
     assert ([len(cont) == len_header for cont in contents])
     return header, contents
 
-
-
-def remove_removed_contents(data, contents):
-    if len(contents[0])!=len(data[0]):
-        # 若data和contents的列数相等，则不需要remove
-        col_idx_contents= len(contents[0])-1
-        for col_idx_data in reversed(range(len(data[0]))):
-            if col_idx_contents < 0:
-                [d.pop(col_idx_data) for d in data]
-                continue
-            col_contents = [item[col_idx_contents] for item in contents]
-            col_data = [item[col_idx_data][0] for item in data]
-#             print("cont {} {}".format(col_idx_contents, col_contents))
-#             print("data {} {}".format(col_idx_data, col_data))
-            if col_data != col_contents:
-                [d.pop(col_idx_data) for d in data]
-            else:
-                col_idx_contents -= 1
-        assert len(contents[0])==len(data[0])
-    return data
 
 def remove_removed_contents(data, contents):
     if len(contents[0])!=len(data[0]):
