@@ -40,7 +40,7 @@ python retriever_preprocess.py \
     --nega intable_contra
 ```
 
-If you want to use the linked passage from BLINK, you can first download the linked passages from [The all_constructed_blink_tables.json in the github release of this rep.](here), then move the json file to `./data_wikitable`. After that, use the following command to preprocess.
+If you want to use the linked passage from BLINK, you can first download the linked passages from [The all_constructed_blink_tables.json](https://github.com/zhongwanjun/CARP/releases/tag/blink-linked-table), then move the json file to `./data_wikitable`. After that, use the following command to preprocess.
 
 ```
 python retriever_preprocess.py \
